@@ -29,4 +29,11 @@ const update = async () => {
 };
 // find();
 
-update();
+// update();
+// 删
+
+const remove = async () => {
+  const result = await User.deleteOne({ name: "Brian" });
+  console.log(result);
+};
+remove();
