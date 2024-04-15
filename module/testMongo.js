@@ -1,15 +1,13 @@
 const mongoose = require("../core/DBHelpler");
 
-const TestShema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const testModel = new TestShema({
-  cuid: { type: String, ref: "users" }, // 评论用户的ID
-  content: { type: String },
-  hands: { type: Number, default: 0 },
-  status: { type: String, defaeult: "1" },
-  isRead: { type: String, default: "0" },
+const testSchmea = new Schema({
+  name: { type: String },
+  age: { type: String, defaeult: "1" },
+  emali: { type: String },
 });
 
-const test = mongoose.model("test", testModel);
+const testModel = mongoose.model("test", testSchmea);
 
-export default test;
+module.exports = testModel;
