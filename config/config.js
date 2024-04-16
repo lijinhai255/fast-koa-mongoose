@@ -1,4 +1,4 @@
-import path from "path";
+const path = require("path");
 
 // const MONGO_USERNAME = process.env.DB_USER || "root";
 // const MONGO_PASSWORD = process.env.DB_PASS || "";
@@ -67,6 +67,9 @@ const apiV3Key = process.env.API_V3 || "wx-api-v3-key";
 
 const WebAppID = "wx-appid";
 const WebSECRET = "wx-secret";
+const APP_ID = "20230726001758571";
+const APP_KEY = "5vQdPlRR3m3UJikcj5Ju";
+const BASE_URL = "http://api.fanyi.baidu.com/api/trans/vip/translate";
 
 module.exports = {
   environment: "dev",
@@ -109,4 +112,7 @@ module.exports = {
   WebAppID,
   WebSECRET,
   logPath,
+  APP_ID,
+  APP_KEY,
+  BASE_URL,
 };

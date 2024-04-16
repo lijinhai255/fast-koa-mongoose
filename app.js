@@ -1,4 +1,6 @@
 const Koa = require("koa");
+const cors = require("@koa/cors");
+const { run } = require("./middlewares/init");
 const InitManger = require("./core/init");
 const bodyParser = require("koa-bodyparser");
 const catchError = require("./middlewares/exception");
@@ -10,9 +12,13 @@ app.context.config = config;
 
 app.use(bodyParser());
 app.use(catchError);
+// 允许所有来源
+app.use(cors());
+
 InitManger.initCore(app);
 
 // 启动服务器
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
+  run();
 });

@@ -10,10 +10,19 @@
   "author": "lijinhai255 <976041476@qq.com>",
   "license": "MIT",
   "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "koa": "^2.15.2",
     "koa-router": "^12.0.1",
+    "mongoose": "^8.3.1",
+    "node-fetch": "^3.3.2",
+    "node-redis-retry-strategy": "^2.1.1",
     "nodemailer": "^6.9.13",
     "qs": "^6.12.1",
+    "redis": "^4.6.13",
+    "request": "^2.88.2",
     "require-directory": "^2.1.1"
   }
 }
