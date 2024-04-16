@@ -5,30 +5,6 @@ const { generateSign } = require("../../../utils/index");
 const AK = "dOZ6sXO2IwAWzkYHy3R176J2";
 const SK = "1UiqMgLn9Gwn5DDRlgcCOmrGYkdknKBk";
 
-async function main(dataObj) {
-  var options = {
-    method: "POST",
-    url:
-      "https://aip.baidubce.com/rest/2.0/ocr/v1/table?access_token=" +
-      (await getAccessToken()),
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-    },
-    form: {
-      cell_contents: "false",
-      return_excel: "false",
-      ...dataObj,
-    },
-  };
-
-  return request(options, function (error, response) {
-    if (error) throw new Error(error);
-    console.log(response.body);
-    return response.body;
-  });
-}
-
 /**
  * 使用 AK，SK 生成鉴权签名（Access Token）
  * @return string 鉴权签名信息（Access Token）
@@ -72,14 +48,6 @@ const translateText = async (text, from = "zh", to = "en") => {
         sign: sign,
       },
     });
-    console.log(response.data, {
-      q: text,
-      from: from,
-      to: to,
-      appid: global.config.APP_ID,
-      salt: salt,
-      sign: sign,
-    });
     return response.data.trans_result[0]?.dst;
   } catch (error) {
     console.error("Translation error:", error.message);
@@ -87,23 +55,85 @@ const translateText = async (text, from = "zh", to = "en") => {
   }
 };
 
-// 定义路由
-router.post("/getTable", async (ctx) => {
-  //   console.log(ctx.request.body);
-  const data = await main(ctx.request.body);
-  ctx.body = data; // 这将覆盖之前中间件设置的 ctx.body
-});
 // 文本翻译
 router.get("/textTranslate", async (ctx) => {
-  console.log('"ctx.request.params"', ctx.params, ctx, "ctx.request.params");
-  const data = await translateText(
-    ctx.query.text,
-    ctx.query.from,
-    ctx.query.to
-  );
-  ctx.body = { data: data, code: 200 }; // 这将覆盖之前中间件设置的 ctx.body
+  if (ctx.query.text) {
+    const data = await translateText(
+      ctx.query.text,
+      ctx.query.from,
+      ctx.query.to
+    );
+    ctx.body = { data: data, code: 200 };
+  }
+  // 这将覆盖之前中间件设置的 ctx.body
   //   ctx.body = "12121"; // 这将覆盖之前中间件设置的 ctx.body
 });
-// post 请求请求体中的参数
-// url参数请求
+
+async function ocrTable(dataObj) {
+  var options = {
+    method: "POST",
+    url:
+      "https://aip.baidubce.com/rest/2.0/ocr/v1/table?access_token=" +
+      (await getAccessToken()),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+    },
+    form: {
+      cell_contents: "false",
+      return_excel: "false",
+      ...dataObj,
+    },
+  };
+
+  return request(options, function (error, response) {
+    if (error) throw new Error(error);
+    return response.body;
+  });
+}
+
+const ocrImage = async (obj) => {
+  try {
+    const accessToken = await getAccessToken();
+    const options = {
+      method: "POST",
+      url: `https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=${accessToken}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      form: {
+        detect_direction: "false",
+        vertexes_location: "false",
+        paragraph: "false",
+        probability: "false",
+        ...obj,
+      },
+    };
+
+    // Using a library like Axios for HTTP requests
+    const response = await axios({
+      method: options.method,
+      url: options.url,
+      headers: options.headers,
+      data: options.form,
+    });
+
+    return response.data; // Directly return the data from Axios promise
+  } catch (error) {
+    // Log error or handle it accordingly
+    console.error("Failed to process OCR Image:", error);
+    throw error; // Rethrow or handle as needed
+  }
+};
+
+router.post("/ocrImage", async (ctx) => {
+  const data = await ocrImage(ctx.request.body);
+  ctx.body = { data, code: 200 };
+});
+// 定义路由
+router.post("/getTable", async (ctx) => {
+  const data = await ocrTable(ctx.request.body);
+  ctx.body = data; // 这将覆盖之前中间件设置的 ctx.body
+});
 module.exports = router;

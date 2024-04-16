@@ -85,7 +85,7 @@ const getHValue = async (key) => {
 const delValue = async (key) => {
   client.del(key, (err, res) => {
     if (res === 1) {
-      console.log("delete successfully");
+      console.log("delete successfully1212");
     } else {
       console.log("delete redis key error:" + err);
     }

@@ -10,7 +10,12 @@ const app = new Koa();
 // 使用配置
 app.context.config = config;
 
-app.use(bodyParser());
+app.use(
+  bodyParser({
+    jsonLimit: "10mb", // Increase the JSON body size limit
+    formLimit: "10mb", // Increase the form body size limit
+  })
+);
 app.use(catchError);
 // 允许所有来源
 app.use(cors());
