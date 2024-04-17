@@ -23,6 +23,7 @@
     "qs": "^6.12.1",
     "redis": "^4.6.13",
     "request": "^2.88.2",
-    "require-directory": "^2.1.1"
+    "require-directory": "^2.1.1",
+    "svg-captcha": "^1.4.0"
   }
 }
