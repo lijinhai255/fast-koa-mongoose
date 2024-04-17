@@ -1,6 +1,7 @@
 const Router = require("koa-router");
 const svgCaptcha = require("svg-captcha");
 const { setValue } = require("../../../core/RedisConfig");
+const LoginController = require("../../controller/LoginController");
 const router = new Router({
   prefix: "/api/tomic",
 });
@@ -33,16 +34,9 @@ router.get("/public/getCaptcha", (ctx) => {
 });
 
 //登录接口
-router.post("/public/login", (ctx) => {
-  const body = ctx.request.body;
-  if (!body.username) {
-    ctx.body = {
-      code: 500,
-      msg: "参数不全！",
-    };
-    return;
-  }
-});
+router.post("/login/login", LoginController.login);
 // post 请求请求体中的参数
 // url参数请求
+router.get("/login/auth", LoginController.auth);
+
 module.exports = router;

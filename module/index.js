@@ -1,4 +1,4 @@
-const User = require("./testMongo");
+const User = require("./UserModel");
 
 const user = {
   name: "Brian",
